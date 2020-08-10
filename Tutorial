@@ -1,0 +1,613 @@
+Instalar:
+- Node + NPM;
+- Yarn;
+- Expo;
+- Visual Studio Code e configurações.
+
+Verifique se você possui o curl instalado rodando no terminal o comando:
+$ curl --version
+
+Caso ele retorne a versão, pode pular para o próximo passo. Caso não, basta rodar o comando:
+$ sudo apt install curl
+
+Com o curl instalado, execute o comando de instalação da versão LTS mais recente disponível:
+$ curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+
+Ou para atualiazar se você já tem o Node 12 (LTS mais recente):
+$ sudo apt-get update && sudo apt-get upgrade
+
+Caso você tem um Node em outra versão que não seja a LTS mais recente (12).:
+$ sudo apt-get remove nodejs
+Em seguida, é preciso remover o Node do pacote de dependências. Aperte a tecla Windows e busque pela opção Software & Updates. Clique na aba Other Software e procure na lista pelas dependências do Node referente a versão que você quer remover. Selecione ambas e clique no botão Remove. Feche a janela e aceita a opção de atualizar as informações clicando no botão Reload. Após remover ambas as dependências, abra o terminal e execute os comandos:
+$ curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+
+Feche o terminal e abra novamente para as alterações fazerem efeito. Por fim, execute os seguintes comandos no terminal:
+$ node -v
+$ npm -v
+
+Para instalar o Yarn 1 no Linux vamos começar configurando o repositório do Yarn executando:
+$ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+$ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+Instale utilizando o seguinte comando:
+$ sudo apt update && sudo apt install --no-install-recommends yarn
+
+Ou para atualizar o seu Yarn 1 utilizando o , siga os passos:
+$ sudo apt-get update
+$ sudo apt-get --only-upgrade install yarn
+
+Adicione ao arquivo ~/.bashrc (ou ~/.zshrc caso você utilize o shell Zsh) a seguinte linha: 
+export PATH="$PATH:`yarn global bin`"
+
+Feche e abra o terminal novamente, em seguida rode o comando:
+yarn --version
+
+instale a extensão Omni. Em seguida, basta pressionar Ctrl + Shift + P e escolher a opção Open Settings (JSON). Na janela que foi aberta, adicione as configurações abaixo:
+
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "newUntitledFile",
+
+  "explorer.compactFolders": false,
+  "editor.renderLineHighlight": "gutter",
+  "workbench.editor.labelFormat": "short",
+  "extensions.ignoreRecommendations": true,
+
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "typescript.updateImportsOnFileMove.enabled": "never",
+
+  "breadcrumbs.enabled": true,
+  "editor.parameterHints.enabled": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  
+  "emmet.syntaxProfiles": { "javascript": "jsx" },
+  "emmet.includeLanguages": { "javascript": "javascriptreact" },
+
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+
+  "workbench.colorTheme": "Omni"
+
+########################Front End#################################
+
+Para criar um novo projeto com Yarn para web:
+//--templates, para templates prontos.
+$ yarn create react-app nomedoprojeto --template typescript
+
+Ou com npm:
+$ npx create-react-app nomedoprojeto --template typescript
+
+Para não carregar a tela inteira (refresh), use <Link /> do react-router-dom, e substitua os <a><a/> (âncoras) por <Link />:
+import { Link } from 'react-router-dom';
+
+<Link to='/study' className='study'>
+    <img src={studyIcon} alt='Estudar' />
+</Link>
+
+Componente escrito em formato de função com typescript:
+interface PageHeaderProps {
+    title: string;
+}
+
+const PageHeader: React.FC<PageHeaderProps> = (props) => {
+    //PageHeader -> Nome do Component
+    //React.FC -> Function Component do React
+    //PageHeaderProps -> Propriedades que ele pode receber como parâmetro
+    //props -> Propriedades recebidas. Ex: {props.title}. A props tem a propriedade automática {props.children} que mostra qual conteúdo que escrivi, ou passei no component.
+}
+
+
+########################Back End#################################
+
+Iniciar um server, dentro da nova pasta server, execute:
+$ yarn init -y
+
+Em seguida, entre na pasta server e crie una nova pasta src, dentro dessa pasta crie o arquivo server.ts. Dentro da apsta server execute o comando para instalar o typescript:
+$ yarn add typescript -D
+
+Em seguida criamos o arquivo de configuração do typescript:
+$ yarn tsc --init
+
+ou se estiver usando npm:
+$ tpx tsc --init
+
+Neste arquivo altere a configuração no arquivo tsconfig.json:
+"target": "es2017", //Conveter as funcionalidades do JS até 2017. Até qual versão vc quer dar suporte. De acrodo com a versãp do NODE instalada.
+
+Instale esta depenedencia que executa o servidor e observa as alterações do script(parecido com o nodemon):
+$ yarn add ts-node-dev -D
+
+Dentro do package.json, crie uma sessão scripts:
+"scripts": {
+    "start": "ts-node-dev src/server.ts", ou abreviado "tsnd src/server.ts",
+},
+Em seguida é só rodar $ yarn start para iniciar a aplicação.
+
+Adicione a flag --transpile-only para transformar typescript para JS e acelerar a execução da aplicação:
+"start": "ts-node-dev --transpile-only src/server.ts",
+
+Adicione a flag --ignore-watch node-modules para não fazer conversões código dentro da pasta node-modules, pois são códigos de terceiros: 
+"start": "ts-node-dev --transpile-only --ignore-watch node-modules src/server.ts",
+
+Adicione a flag --respawn para a aplicação startar automaticamenete depois de cada alteração no script.
+"start": "ts-node-dev --transpile-only --ignore-watch node-modules --respawn src/server.ts",
+
+Adicionar o micro-framework express, para não precisar configurar muita coisa do zero:
+$ yarn add express
+
+Se ficar com erro após importar o express no arquivo em construção, instale:
+$ yarn add @types/express -D
+
+No arquivo server.ts Ex:
+
+import express from 'express';
+
+const app =express();
+
+app.use(express.json());//Para o express entender json adicionando o plugin express.json().
+
+app;get('/', (request, response) => {
+    const users = [
+        { name: 'Marcelo, age: 30 },
+    ]
+
+    return response.json(users);
+})
+
+app.listen(3333);//porta que vai rodar o localhost
+
+Depois chame a rota no Insomnia para testar.
+
+Importante instalar o pacote cors, para permitir que aplicações com endereços diferentes possasm acessar a api. Execute:
+$ yarn add cors
+
+//Pode ser q tenha instalar o @types/cors
+$ yarn add @types/cors -D
+
+No arquivo server.ts Ex:
+
+import express from 'express';
+import cors from 'cors'; 
+
+const app =express();
+
+app.use(cors());
+app.use(express.json());
+
+app;get('/', (request, response) => {
+    const users = [
+        { name: 'Marcelo, age: 30 },
+    ]
+
+    return response.json(users);
+})
+
+app.listen(3333);
+
+A propiedade HTMLAttributes permite passar todos e qualquer propriedade existentes de um Input html. 
+Caesso essas propriedades através de spred operator ...rest
+import React, { SelectHTMLAttributes } from 'react';
+
+import './styles.css';
+
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+    label: string;
+    name: string;
+    //options é um Array de objetos
+    options: Array<{
+        value: string;
+        label: string;
+    }>;
+}
+
+const Select: React.FC<SelectProps> = ({ name, label, options, ...rest }) => {
+    return (
+        <div className="select-block">
+            <label htmlFor={name}>{label}</label>
+            <select id={name} value="" {...rest}>
+                <option value="" disabled hidden>Selecione uma opção</option>
+                {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+            </select>
+        </div>
+    );
+}
+
+export default Select;
+
+Para fazer a comunicação entre front end e back end, ou para a aplicação consumir a api através de requisições, instale a lib axios:
+$ yarn add axios
+
+Em seguida, crie uma pasta, dentro de src chamada services e cri um arquivo api.ts
+
+import axios from 'axios';
+
+Endereço base da api, comum em todas as rotas.
+const api = axios.create({
+    baseURL: 'http://localhost:3333',
+})
+
+export default api;
+
+A api deverá estar rodando:
+$ yarn start (dentro do back end) 
+
+
+Agora é só chamar uma rota na aplicação para receber os dados. Ex:
+
+useEffect(() => {
+    api.get('connections).then(response => {
+        const { total } = response.data ;
+        
+        setTotalConnections(total);  
+    })
+});
+
+#####################BD e Migrations#################################
+
+Instalar as dependências do drive do sqLite para o node poder conversar com ele, e o knex, que é um query builder em javascript:
+$ yarn add knex sqlite3
+
+Ex query com knex:
+SQL -> SELECT * FROM tabela;
+JS -> knex('tabela').select('*');
+
+Dentro de src cria uma nova pasta database, e dentro dele um arquivo connections.ts Ex:
+import knex from 'knex';
+
+const db = knex({
+    client: 'sqlite3',
+    connection: {
+        filename: path.resolve(--dirname, 'database.sqlite')
+    },
+    useNullAsDefault: true, //Parâmetro específico par sqlite, para dizer que o valor padrão, caso não exista, seja null.
+})
+
+export default db;
+
+Listar os comandos disponíveis do knex.
+$ yarn knex
+
+Para as migrations knex, crie um arquivo knexfile.ts dentro de src e edite no arquivo:
+
+import path from 'path';
+
+modules.exports = {
+    client: 'sqlite3',
+    connection: {
+        filename: path.resolve(--dirname, 'src', 'database', 'database.sqlite')
+    },
+    migrations: {
+        directory: path.resolve(--dirname, 'src', 'database', 'migrations')
+    },
+    useNullAsDefault: true,
+}
+
+module.exports é a sintaxe velha do export default de hoje.
+
+Dentro da pasta migrations, crie um arquivo chamado, Ex: 00_create_users.ts e edite:
+
+import Knex from 'knex';
+
+export async function up(knex: Knex) {
+    return knex.schema.createTable('users', (table) => {
+        table.increments('id').primary();
+        table.string('name').notNullable();
+        table.string('avatar').notNullable();
+        table.string('whatsapp').notNullable();
+        table.string('bio').notNullable();
+    });
+}
+
+export async function down(knex: Knex) {
+    return knex.schema.dropTable('users');
+}
+ 
+
+Agora vamos alterar o comando knex:migrate, atavés do package.json:
+"scripts": {
+    "knex:migrate": "knex --knexfile kenexfile.ts migrate:latest",
+    "knex:migrate:rollback" "knex --knexfile kenexfile.ts migrate:rollback",
+},
+
+Depois para executar os comandos:
+$ yarn knex:migrate //para criar
+$ yarn knex:migrate:rollback //para voltar
+
+Depois deve instalar uma interface para manipular e visualizar o BD. Pode instalar a extensão SQLite. Dê um >reload e clique com o botão direito no arquivo database.sqlite e escolha a opção Open Database.
+Lá em baixo do editor do lado esquerdo aparecrá SQLite Explorer.
+
+Uma tabela com relacionamento com a tabela users.
+import Knex from 'knex';
+
+export async function up(knex: Knex) {
+    return knex.schema.createTable('classes', (table) => {
+        table.increments('id').primary();
+        table.string('subject').notNullable();
+        table.decimal('cost').notNullable();
+
+        //Aqui relacionamento
+        table.integer('user_id')
+            .notNullable()
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+    });
+}
+
+export async function down(knex: Knex) {
+    return knex.schema.dropTable('classes');
+}
+
+import Knex from 'knex';
+
+export async function up(knex: Knex) {
+    return knex.schema.createTable('class_schedule', (table) => {
+        table.increments('id').primary();
+        
+        table.integer('week_day').notNullable(); //Dia da aula
+        table.integer('from').notNullable(); //Hora que começa
+        table.integer('to').notNullable(); //Hora que termina
+        
+        table.integer('class_id')
+            .notNullable()
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+    });
+}
+
+export async function down(knex: Knex) {
+    return knex.schema.dropTable('class_schedule');
+}
+
+import Knex from 'knex';
+
+export async function up(knex: Knex) {
+    return knex.schema.createTable('connections', (table) => {
+        table.increments('id').primary();
+        
+        table.integer('user_id')
+            .notNullable()
+            .references('id')
+            .inTable('users')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+
+        table.timestamp('created_at')
+            .defaultTo(knex.raw('CURRENT_TIMESTAMP'))
+            .notNullable();
+    });
+}
+
+export async function down(knex: Knex) {
+    return knex.schema.dropTable('connections');
+}
+
+Separe as rotas num arquivo de rotas e tirando do server.ts.
+
+Popular as tabelas pelo Inmsonia através das rotas criadas para GET, POST. Usando JSON e não BODY no corpo da requisição HTTP. Ex:
+http://localhost:3333/classes
+
+{
+    "name": "Marcelo,
+    "schedule": [
+        { "week_day": 1, "from": "8:00", "to": "12:00" },
+        { "week_day": 2, "from": "8:00", "to": "12:00" }
+    ]
+}
+
+Depois pode pegar tudo em routes através de data com request.body e desestruturar.
+const {nome, schedule} - request.body;
+
+Em routes.ts para testar os dados vindos do insomnia:
+
+import express from 'express';
+import db from './database/connection';
+
+import convertHourToMinutes from './utils/convertHourToMinutes';
+
+const routes = express.Router();
+
+//Validar os tipos de dados vindos na rota e passar no ScheduleItem da const classSchedule.
+interface ScheduleItem {
+    week_day: number;
+    from: string;
+    to: string;
+}
+
+routes.post('/classes', async (request, response) => {
+    const {
+        name,
+        schedule,
+    } = request.body;
+
+    const trx = await db.transaction(); // Evita fazer alterações no BD se houver algum erro durante a transação.
+    try {
+        const insertedUsersIds = await trx('users').insert({
+            name,
+        });
+
+        const user_id = insertedUsersIds[0];
+
+        const insertedClassesIds = await trx('classes').insert({
+            blabla,
+        });
+
+        const class_id = insertedClassesIds[0];
+
+        const classSchedule = schedule.map((scheduleItem: ScheduleItem) => {
+            return {
+                class_id,
+                week_day: scheduleItem.week_day,
+                from: convertHourToMinutes(scheduleItem.from), \\convertHourToMinutes() funcção exportada de utils para coneverter string em int minutos,
+                to: convertHourToMinutes(scheduleItem.to),
+            };
+        });
+
+        await trx('class_schedule').insert(classSchedule);
+
+        await trx().commit(); // Se deu tudo certo, altera no BD.
+
+        return response.status(201).send();
+    } catch (err) {
+        await trx.rollback(); //Desfaz alguma alteração no BD em caso de erro.
+
+        return response.status(400).json({
+            error: 'Aconteceu um erro';
+        })
+    }
+});
+
+export default routes;
+
+Um exemplo de função personalizada para convereter horas type string em minutos type int, pois o BD não aceita string para hora.
+Em ./utils/convertHourToMinutes.
+
+export default function convertHourToMinutes(time: string) {
+    const [hour, minutes] = tiem.split(':').map(Number);
+    const timeInMinutes = (hour * 60) + minutes;
+
+    return timeInMinutes;
+}
+
+Aí é só ir conferindo no BD conforme ir cadatrando pelo insomnia.
+
+
+##########################mobile####################################
+
+Verifique se o Expo está instalado.
+$ expo --version
+
+Para instalar o Expo é bem simples e o passo é o mesmo nos 3 sistemas operacionais. Com o Node e Yarn instalados, abra o terminal (no Windows, sem ser como admin) e execute:
+$ yarn global add expo-cli
+
+Para verificar se a instalação ocorreu com sucesso, execute:
+$ npm install expo-cli --global
+
+Para verificar se a instalação ocorreu com sucesso, execute:
+$ expo --version
+
+Caso você esteja usando Linux/macOS e esteja com esses problemas:
+
+- comando expo não encontrado (mesmo após fazer a instalação com sucesso);
+- expo só funciona enquanto o terminal está aberto, se reiniciar para de funcionar.
+
+Você não deve ter exportado corretamente o caminho global do Yarn. Para isso basta acessar sua pasta home e abrir o arquivo ~/.bashrc (ou ~/.zshrc caso você utilize o shell Zsh). No final do arquivo, adicione seguinte linha: 
+    export PATH="$PATH:`yarn global bin`"
+Feche e abra o terminal novamente, em seguida rode o comando:
+    expo --version
+
+
+Em seguida, crie o projeto executando(escolha a opção blanck (Typescript)):
+$expo init mobile
+
+Entre na pasta mobile e execute:
+$yarn start
+
+Se vc não quiser usar emulador: 
+- O celular deve estar na mesma rede. 
+- Baixe o aplicativo Expo na loja da Google.
+- Abra o aplicativo e scaneie o QRCode na página do navegador expo pelo seu aplicativo.
+
+Com emulador na máquina:
+Como instalar -> https://www.youtube.com/watch?v=eSjFDWYkdxM
+Dúvidas ou problemas -> https://github.com/Rocketseat/expo-common-issues
+
+Arquivo principal é o App.tsx.
+
+Não se usa tgs html. è usado componentes pré criados pelo React Native, como: Text, View e etc...
+
+<View/> -> representa um bloco, como se fosse <div>, <main>, <header>, <footer> e etc... Tudo que é um bloco vai ser <View/>.
+
+<Text/> -> Tudo que for texto é <Text/>.
+
+<StyleSheet/> -> Não se usa arquivos css para estilizar arquivos, usasse <StyleSheet/>, em forma de objeto que comporta várias estilizações. Tbm não existe herança, com exceção da tag <Text/>, cada tag deverá ter sua confguração de style. Nas configurações não se usa -, no lugar usa-se a próxima letra maiúscula. Não tem grid, animações e gradiente. Todos os elementos já tem seu display flex. Padrão de fluides flexDirection é Column, ou de cima pra baixo. Não existe variáveis no css. a funcção onPress equivale ao onClick do JS.
+
+Para importar arquivos de imagem para o React Native,desntro do src crie uma pasta @types e dentro o arquivo index.d.ts. No arquivo acrescente para os tipos que desejar. Esse arquivo será lido somente pelo typescript.
+declare module '*.png';
+
+Instale o pacote expo-font para importar fontes da google. Ex: archivo e poppins:
+$ expo install expo-font @expo-google-fonts/archivo @expo-google-fonts/poppins
+
+Instalar  pacote React Navigation para negação no Native. Para consulta: https://reactnavigation.org/. Execute:
+$ yarn add @react-navigation/native
+
+Em seguida:
+$ expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+Existem 3 tipo de navegação. Vamos usar a Stack. Execute:
+$ yarn add @react-navigation/stack
+
+E também a Tabs:
+$ yarn add @react-navigation/bottom-tabs
+
+Crie uma pasta routes sentro de src, e cri o arquivo AppStack.tsx e escreva:
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Landing from '../pages/Landing';
+import GiveClasses from '../pages/GiveClasses';
+import StudyTabs from './StudyTabs';
+
+const { Navigator, Screen } = createStackNavigator();
+
+function AppStack() {
+  return (
+    <NavigationContainer>
+      <Navigator screenOptions={{ headerShown: false }}>//screenOptions configurações para o header da tela
+        <Screen name='Landing' component={Landing} />
+        <Screen name='GiveClasses' component={GiveClasses} />
+        <Screen name='Study' component={StudyTabs} />
+      </Navigator>
+    </NavigationContainer>
+  );
+}
+
+No expo, diverso pacotes de icones já vem por padrão, para usar:
+import { Ionicons } from '@expo/vector-icons';
+
+Para receber um componente como props, o type dele deverá ser "ReactNode".
+
+Para comunicar o front com a api do Natice, crie uma pasta server com um arquivo api.ts com este script:
+Pegar endereço na aba do navegador do expo em CONNECTION: exp://192.168.1.100:19000, tire o começo e o final (porta), adicione a porta da api.
+
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://192.168.1.100:3333',
+});
+
+export default api;
+
+Instalar um BD dentro do dipositivo, usamos a lib Expo Async Storage. Permite salvar dados em formato de texto, em JSON (JSON.parse() ou JSON.stringify()). Para instalar execute:
+$ expo install @react-native-community/async-storage
+
+ function loadFavorites(){
+        AsyncStorage.getItem('favorites').then(response => {
+            if (response) {
+                const favoritedTeachers = JSON.parse(response);
+                const favoritedTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
+                    return teacher.id;
+                })
+
+                setFavorites(favoritedTeachersIds);
+            }
+        });
+    }
+
+Quando usamos linkabas, não dispara ação ao trocar abas com useEffect, então temos que usar useFocusEffect parar quando a tela estiver em focus:
+
+import { useFocusEffect } from '@react-navigation/native';
+
+   useFocusEffect(() => {
+        loadFavorites();
+    });
+
+https://www.notion.so/Vers-o-2-0-Proffy-eefca1b981694cd0a895613bc6235970
