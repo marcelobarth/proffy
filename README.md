@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/web%3F-ok-00b8d3?style=for-the-badge" alt="Sistema web Ok" />
   <img src="https://img.shields.io/badge/server%3F-ok-00b8d3?style=for-the-badge" alt="Server OK" />
   <img src="https://img.shields.io/badge/app mobile%3F-No-00b8d3?style=for-the-badge" alt="Aplicativo mobile No" />
-  <img src="https://img.shields.io/github/license/marcelobarth/proffy?color=00b8d3&style=for-the-badge" alt="License" />
+  <img src="https://img.shields.io/github/license/matheusfelipeog/proffy?color=00b8d3&style=for-the-badge" alt="License" />
 </h2>
 
 <h1 align="center">
@@ -60,7 +60,7 @@ Este repositório é um monorepo, portanto, manterá os fontes do projeto **Web*
 Clone o repositório com:
 
 ```bash
-> git clone https://github.com/marcelobarth/happy.git
+> git clone https://github.com/matheusfelipeog/happy.git
 ```
 
 As demonstrações utilizam **YARN** por padronização, mas, caso use **NPM**, basta substituir onde estiver escrito `yarn` por `npm`.
@@ -110,7 +110,7 @@ Acesse: [`http://127.0.0.1:3333/`](http://127.0.0.1:3333/) para visualizar.
 
 Siga os passos abaixo para contribuir:
 
-1. Faça o *fork* do projeto (<https://github.com/marcelobarth/happy>)
+1. Faça o *fork* do projeto (<https://github.com/matheusfelipeog/happy>)
 
 2. Clone o seu *fork* para sua maquína (`git clone https://github.com/user_name/happy.git`)
 
