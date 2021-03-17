@@ -110,7 +110,7 @@ Acesse: [`http://127.0.0.1:3333/`](http://127.0.0.1:3333/) para visualizar.
 
 Siga os passos abaixo para contribuir:
 
-1. Faça o *fork* do projeto (<https://github.com/matheusfelipeog/happy>)
+1. Faça o *fork* do projeto (<https://github.com/marcelobarth/happy>)
 
 2. Clone o seu *fork* para sua maquína (`git clone https://github.com/user_name/happy.git`)
 
