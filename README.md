@@ -60,7 +60,7 @@ Este repositório é um monorepo, portanto, manterá os fontes do projeto **Web*
 Clone o repositório com:
 
 ```bash
-> git clone https://github.com/matheusfelipeog/happy.git
+> git clone https://github.com/marcelobarth/happy.git
 ```
 
 As demonstrações utilizam **YARN** por padronização, mas, caso use **NPM**, basta substituir onde estiver escrito `yarn` por `npm`.
